@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <script src="/jquery.min.js"></script>
+    <script src="/layer-v3.1.1/layer/layer.js"></script>
+    <link rel="stylesheet" href="/pagination/common/common.css" />
+    <link rel="stylesheet" href="/pagination/common/highlight.min.css" />
+    <script src="/pagination/jquery.pagination.js"></script>
+
+
+
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    
+    img {
+        width: 130px;
+        height: auto;
+    }
+    /*
+			  * 外面盒子样式---自己定义
+			  */
+</style>
+
+<body>
+    <div class="container">
+
+
+        <a href="/add" class="btn btn-primary">添加</a>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>车名</th>
+                    <th>车主</th>
+                    <th>图片</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tb">
+            </tbody>
+        </table>
+        <div class="page">
+            <div class="m-style M-box11"></div>
+        </div>
+    </div>
+    <script>
+        getuser()
+
+        function getuser() {
+            $.get("http://localhost:7777/user").then(res => {
+                const list = res.list
+                $('#tb').html('')
+                    // console.log(res.list)
+                for (var i = 0; i < list.length; i++) {
+                    console.log(i)
+                    $('#tb').append(`
+                        <tr>
+                            <td>
+                            ${i+1}
+                            </td>
+                            <td>
+                                ${list[i].name}
+                            </td>
+                                <td>
+                                   ${list[i].p.name}
+                                </td>
+                        <td><img src="${list[i].carImg}" alt=""></td>
+                        <td>
+                            <a href="/edit/${list[i]._id}" class="btn btn-primary">修改</a>
+                            <button class="btn btn-danger" onclick="deletItem('${list[i]._id}')">删除</button>
+                        </td>
+                        </tr>`);
+                }
+
+            })
+        }
+
+
+        function deletItem(id) {
+            layer.confirm('您真的要删除吗？', {
+                btn: ['删除', '不了'] //按钮
+            }, function() {
+
+                $.ajax({
+                    type: 'delete',
+                    url: 'http://localhost:7777/deletitem/' + id,
+                    success: function(res) {
+                        if (res.code === 200) {
+                            getuser()
+
+                            layer.msg(res.msg)
+                        }
+
+
+                    }
+                })
+            }, function() {
+
+
+            });
+        }
+
+        //页码显示
+        $('.M-box11').pagination({
+            mode: 'fixed'
+        });
+    </script>
+</body>
+
+</html>

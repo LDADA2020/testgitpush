@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <script src="/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>我是登陆页面</h1>
+
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="text" class="form-control" id="username" placeholder="请输入用户名">
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="text" class="form-control" id="password" placeholder="请输入密码">
+        </div>
+        <button type="javascript:;" class="btn btn-danger">登陆</button>
+
+    </div>
+    <script>
+        $('button').click(function() {
+            var username = $('#username').val()
+            var password = $('#password').val()
+                // console.log(username, password)
+            $.post("http://localhost:7777/dologin", {
+                username,
+                password
+            }).then(res => {
+                alert(res.msg)
+                if (res.code === 200) {
+                    console.log(res)
+                    location.href = '/'
+                } else {
+                    location.href = '/login'
+                }
+            })
+
+
+
+
+
+        })
+    </script>
+</body>
+
+</html>

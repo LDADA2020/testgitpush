@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <script src="/jquery.min.js"></script>
+</head>
+<style>
+    img {
+        width: 200px;
+        height: auto;
+    }
+</style>
+
+<body>
+    <div class="container">
+
+
+        <div class="form-group">
+            <label for="">选择图片</label>
+            <input type="file" class="form-control" id="carImg">
+            <img src="" alt="" id="img">
+        </div>
+        <div class="form-group">
+            <label>汽车名字</label>
+            <input type="text" class="form-control" id="carname">
+        </div>
+        <div class="form-group">
+            <label for="carname">车主名字</label>
+            <select name="" id="selectuser" class="form-control">
+                <% for(var i=0;i<list.length;i++){ %>
+               <option value="<%=list[i]._id%>"><%=list[i].name%></option>
+               <% } %>
+           </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <script>
+        $("#carImg").change(function() {
+            var imginfo = $("#carImg").get(0).files[0] //转成原生的JS对象，
+            var formdata = new FormData() //这是一个传输的过程中的参数
+            formdata.append('avatar', imginfo)
+            $.ajax({
+                type: "post",
+                url: 'http://localhost:7777/upload',
+                data: formdata,
+                async: true, //异步加载
+                cache: false, //不缓存
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.code === 200) {
+                        $('#img').attr('src', data.path) //实现图片的加载不是用VAL
+                            // $('#hideCarImg').val(data.path)
+                            // alert("图片加载成功")
+                    }
+                },
+            })
+        })
+        $('button').click(function() {
+            var carname = $('#carname').val()
+            var user = $("#selectuser").val()
+            var carImg = $('#img').attr('src') //获取到图片的路径
+                // console.log(carname, user, carImg)
+            $.post('http://localhost:7777/doAdd', {
+                carname,
+                user,
+                carImg
+            }).then(res => {
+                if (res.code === 200) {
+                    location.href = '/'
+                }
+            })
+
+        })
+    </script>
+</body>
+
+</html>

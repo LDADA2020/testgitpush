@@ -1,0 +1,19 @@
+{
+  "name": "am",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.4",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {},
+  "description": ""
+}
